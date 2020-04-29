@@ -206,14 +206,16 @@ function ougc_dmifd_load_language()
 
 function ougc_dmifd_forumdisplay_get_threads()
 {
-	global $foruminfo, $db, $plugins, $settings;
+	global $foruminfo, $db, $plugins, $settings, $ougc_dmifd_forumdisplay_get_threads;
 
 	$foruminfo['fid'] = (int)$foruminfo['fid'];
 
-	if(!$settings['ougc_dmifd_forums'] || ((int)$settings['ougc_dmifd_forums'] !== -1 && !in_array($foruminfo['fid'], explode(',', $settings['ougc_dmifd_forums']))))
+	if($ougc_dmifd_forumdisplay_get_threads === true || !$settings['ougc_dmifd_forums'] || ((int)$settings['ougc_dmifd_forums'] !== -1 && !in_array($foruminfo['fid'], explode(',', $settings['ougc_dmifd_forums']))))
 	{
 		return;
 	}
+
+	$ougc_dmifd_forumdisplay_get_threads === true;
 
 	control_object($db, '
 		function query($string, $hide_errors=0, $write_query=0)
