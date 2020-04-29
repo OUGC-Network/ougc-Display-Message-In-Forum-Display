@@ -4,9 +4,9 @@
  *
  *	OUGC Display Message In Forum Display plugin (/inc/plugins/ougc_dmifd.php)
  *	Author: Omar Gonzalez
- *	Copyright: © 2019 Omar Gonzalez
+ *	Copyright: © 2019 2020 Omar Gonzalez
  *
- *	Website: http://omarg.me
+ *	Website: https://ougc.network
  *
  *	Display the thread message inside the forum display thread listing.
  *
@@ -54,11 +54,11 @@ function ougc_dmifd_info()
 	return array(
 		'name'			=> 'OUGC Display Message In Forum Display',
 		'description'	=> $lang->ougc_dmifd_desc,
-		'website'		=> 'https://omarg.me/thread?public/plugins/mybb-ougc-display-message-in-forum-display',
+		'website'		=> 'https://ougc.network',
 		'author'		=> 'Omar G.',
-		'authorsite'	=> 'https://omarg.me',
-		'version'		=> '1.8.19',
-		'versioncode'	=> 1819,
+		'authorsite'	=> 'https://ougc.network',
+		'version'		=> '1.8.20',
+		'versioncode'	=> 1820,
 		'compatibility'	=> '18*',
 		'codename'		=> 'ougc_dmifd',
 		'pl'			=> array(
@@ -106,50 +106,50 @@ function ougc_dmifd_activate()
 	$cache->update('ougc_plugins', $plugins);
 }
 
-	// Plugin API:_is_installed() routine
-	function ougc_dmifd_is_installed()
+// Plugin API:_is_installed() routine
+function ougc_dmifd_is_installed()
+{
+	global $cache;
+
+	$plugins = $cache->read('ougc_plugins');
+	if(!$plugins)
 	{
-		global $cache;
-
-		$plugins = $cache->read('ougc_plugins');
-		if(!$plugins)
-		{
-			$plugins = array();
-		}
-
-		return isset($plugins['ougc_dmifd']);
+		$plugins = array();
 	}
 
-	// Plugin API:_uninstall() routine
-	function ougc_dmifd_uninstall()
+	return isset($plugins['ougc_dmifd']);
+}
+
+// Plugin API:_uninstall() routine
+function ougc_dmifd_uninstall()
+{
+	global $PL, $cache;
+
+	ougc_dmifd_load_pluginlibrary();
+
+	// Delete settings
+	$PL->settings_delete('ougc_feedback');
+
+	// Delete version from cache
+	$plugins = (array)$cache->read('ougc_plugins');
+
+	if(isset($plugins['ougc_dmifd']))
 	{
-		global $PL, $cache;
-
-		ougc_dmifd_load_pluginlibrary();
-
-		// Delete settings
-		$PL->settings_delete('ougc_feedback');
-
-		// Delete version from cache
-		$plugins = (array)$cache->read('ougc_plugins');
-
-		if(isset($plugins['ougc_dmifd']))
-		{
-			unset($plugins['ougc_dmifd']);
-		}
-
-		if(!empty($plugins))
-		{
-			$cache->update('ougc_plugins', $plugins);
-		}
-		else
-		{
-			$PL->cache_delete('ougc_plugins');
-		}
-
-		$cache->update_forums();
-		$cache->update_usergroups();
+		unset($plugins['ougc_dmifd']);
 	}
+
+	if(!empty($plugins))
+	{
+		$cache->update('ougc_plugins', $plugins);
+	}
+	else
+	{
+		$PL->cache_delete('ougc_plugins');
+	}
+
+	$cache->update_forums();
+	$cache->update_usergroups();
+}
 
 // PluginLibrary requirement check
 function ougc_dmifd_load_pluginlibrary()
@@ -196,7 +196,7 @@ function ougc_dmifd_load_language()
 		$lang->setting_group_ougc_dmifd = 'OUGC Display Message In Forum Display';
 		$lang->setting_group_ougc_dmifd_desc = 'Display the thread message inside the forum display thread listing.';
 		$lang->setting_ougc_dmifd_forums = 'Allowed Forums';
-		$lang->setting_ougc_dmifd_forums_desc = 'Select the forums where this feature should be run in.';
+		$lang->setting_ougc_dmifd_forums_desc = 'Select the forums where this feature should be run in.<br />You need to manually place <i>{$thread[\'message\']}</i> inside your <i>forumdisplay_thread</i> template.';
 
 		// PluginLibrary
 		$lang->ougc_dmifd_pluginlibrary_required = 'This plugin requires <a href="{1}">PluginLibrary</a> version {2} or later to be uploaded to your forum.';
