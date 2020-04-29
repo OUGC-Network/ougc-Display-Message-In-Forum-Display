@@ -210,35 +210,62 @@ function ougc_dmifd_forumdisplay_get_threads()
 
 	$foruminfo['fid'] = (int)$foruminfo['fid'];
 
-	if($ougc_dmifd_forumdisplay_get_threads === true || !$settings['ougc_dmifd_forums'] || ((int)$settings['ougc_dmifd_forums'] !== -1 && !in_array($foruminfo['fid'], explode(',', $settings['ougc_dmifd_forums']))))
+	if(!$settings['ougc_dmifd_forums'] || ((int)$settings['ougc_dmifd_forums'] !== -1 && !in_array($foruminfo['fid'], explode(',', $settings['ougc_dmifd_forums']))))
 	{
 		return;
 	}
 
-	$ougc_dmifd_forumdisplay_get_threads === true;
-
-	control_object($db, '
-		function query($string, $hide_errors=0, $write_query=0)
-		{
-			static $done = false;
-			if(!$done && strpos($string, \'t.username AS threadusername, u.username\') !== false)
+	if($ougc_dmifd_forumdisplay_get_threads !== true)
+	{
+		control_object($db, '
+			function query($string, $hide_errors=0, $write_query=0)
 			{
-				$done = true;
-				$string = strtr($string, array(
-					\', u.username\' => \', u.username, p.message, p.smilieoff\',
-					\'users u ON (u.uid = t.uid)\' => \'users u ON (u.uid = t.uid) LEFT JOIN '.TABLE_PREFIX.'posts p ON (p.pid = t.firstpost)\'
-				));
+				static $done = false;
+				if(!$done && !$write_query && strpos($string, \'t.username AS threadusername, u.username\') !== false)
+				{
+					$done = true;
+					$string = strtr($string, array(
+						\'SELECT t.*, \' => \'SELECT t.*, p.message, p.smilieoff, \',
+						\'WHERE t.fid=\' => \'LEFT JOIN '.TABLE_PREFIX.'posts p ON (p.pid = t.firstpost) WHERE t.fid=\'
+					));
+				}
+				return parent::query($string, $hide_errors, $write_query);
 			}
-			return parent::query($string, $hide_errors, $write_query);
-		}
-	');
+		');
+	}
+
+	$ougc_dmifd_forumdisplay_get_threads = true;
 
 	$plugins->add_hook('forumdisplay_thread', 'ougc_dmifd_forumdisplay_thread');
 }
 
 function ougc_dmifd_forumdisplay_thread()
 {
-	global $thread, $foruminfo, $parser, $mybb;
+	global $thread, $foruminfo, $parser, $mybb, $threadcache, $db, $attachcache;
+
+	if($attachcache === null && $mybb->settings['enableattachments'])
+	{
+		$attachcache = array();
+
+		$pids = array();
+
+		foreach($threadcache as $t)
+		{
+			if($t['attachmentcount'] > 0 || is_moderator($fid, 'caneditposts'))
+			{
+				$pids[] = (int)$t['firstpost'];
+			}
+		}
+
+		if($pids)
+		{
+			$query = $db->simple_select("attachments", "*", "pid IN ('".implode("','", $pids)."')");
+			while($attachment = $db->fetch_array($query))
+			{
+				$attachcache[$attachment['pid']][$attachment['aid']] = $attachment;
+			}
+		}
+	}
 
 	$parser_options = array(
 		'allow_html'	=> $foruminfo['allowhtml'],
@@ -274,6 +301,12 @@ function ougc_dmifd_forumdisplay_thread()
 	}
 
 	$thread['message'] = $parser->parse_message($thread['message'], $parser_options);
+
+	if($mybb->settings['enableattachments'] && $attachcache[$thread['firstpost']])
+	{
+		require_once MYBB_ROOT.'inc/functions_post.php';
+		get_post_attachments($thread['firstpost'], $thread);
+	}
 }
 
 // control_object by Zinga Burga from MyBBHacks ( mybbhacks.zingaburga.com ), 1.62
