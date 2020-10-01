@@ -224,10 +224,23 @@ function ougc_dmifd_forumdisplay_get_threads()
 				if(!$done && !$write_query && strpos($string, \'t.username AS threadusername, u.username\') !== false)
 				{
 					$done = true;
-					$string = strtr($string, array(
-						\'SELECT t.*, \' => \'SELECT t.*, p.message, p.smilieoff, \',
-						\'WHERE t.fid=\' => \'LEFT JOIN '.TABLE_PREFIX.'posts p ON (p.pid = t.firstpost) WHERE t.fid=\'
-					));
+
+					$replaces = [];
+
+					if(my_strpos($string, "p.message, p.smilieoff") === false)
+					{
+						$replaces["SELECT t.*, "] = "SELECT t.*, p.message, p.smilieoff, ";
+					}
+
+					if(my_strpos($string, "posts p ON") === false)
+					{
+						$replaces["WHERE t.fid="] = "LEFT JOIN '.$db->table_prefix.'posts p ON (p.pid = t.firstpost) WHERE t.fid=";
+					}
+
+					if($replaces)
+					{
+						$string = strtr($string, $replaces);
+					}
 				}
 				return parent::query($string, $hide_errors, $write_query);
 			}
