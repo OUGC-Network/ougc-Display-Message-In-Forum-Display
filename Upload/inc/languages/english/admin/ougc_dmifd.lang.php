@@ -2,7 +2,7 @@
 
 /***************************************************************************
  *
- *    OUGC Display Message In Forum Display plugin (/inc/languages/espanol/admin/ougc_dmifd.lang.php)
+ *    OUGC Display Message In Forum Display plugin (/inc/languages/english/admin/ougc_dmifd.lang.php)
  *    Author: Omar Gonzalez
  *    Copyright: © 2019 Omar Gonzalez
  *
@@ -29,12 +29,12 @@
 // Plugin API
 $l = [
     'ougcDisplayMessageInForumDisplay' => 'OUGC Display Message In Forum Display',
-    'ougcDisplayMessageInForumDisplay_desc' => 'Muestra el mensaje del tema dentro del listado de temas en los foros.',
+    'ougcDisplayMessageInForumDisplay_desc' => 'Display the thread message inside the forum display thread listing.',
 
-    'setting_group_DisplayMessageInForumDisplay_' => 'Muestra el mensaje de los temas en el listado de temas',
-    'setting_group_DisplayMessageInForumDisplay_desc' => 'Muestra el mensaje del tema dentro del listado de temas en los foros.',
-    'setting_DisplayMessageInForumDisplay_forums' => 'Activar en Foros',
-    'setting_DisplayMessageInForumDisplay_forums_desc' => 'Selecciona los foros donde se mostrara el mensaje de los temas.',
+    'setting_group_DisplayMessageInForumDisplay_' => 'Display Message In Forum Display',
+    'setting_group_DisplayMessageInForumDisplay_desc' => 'Display the thread message inside the forum display thread listing.',
+    'setting_DisplayMessageInForumDisplay_forums' => 'Enabled Forums',
+    'setting_DisplayMessageInForumDisplay_forums_desc' => 'Select the forums where this feature should be run in',
 
-    'ougcDisplayMessageInForumDisplay_pluginLibrary' => 'Este plugin requiere <a href="{1}">PluginLibrary</a> version {2} para funcionar',
+    'ougcDisplayMessageInForumDisplay_pluginLibrary' => 'This plugin requires <a href="{1}">PluginLibrary</a> version {2} or later to be uploaded to your forum.',
 ];
