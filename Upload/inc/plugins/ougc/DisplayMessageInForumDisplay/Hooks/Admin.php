@@ -2,7 +2,7 @@
 
 /***************************************************************************
  *
- *    OUGC Display Message In Forum Display plugin (/inc/languages/espanol/admin/ougc_dmifd.lang.php)
+ *    OUGC Display Message In Forum Display plugin (/inc/plugins/ougc/DisplayMessageInForumDisplay/Hooks/Admin.php)
  *    Author: Omar Gonzalez
  *    Copyright: © 2019 Omar Gonzalez
  *
@@ -26,17 +26,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-// Plugin API
-$l = [
-    'ougcDisplayMessageInForumDisplay' => 'OUGC Display Message In Forum Display',
-    'ougcDisplayMessageInForumDisplay_desc' => 'Muestra el mensaje del tema dentro del listado de temas en los foros.',
+declare(strict_types=1);
 
-    'setting_group_DisplayMessageInForumDisplay_' => 'Muestra el mensaje de los temas en el listado de temas',
-    'setting_group_DisplayMessageInForumDisplay_desc' => 'Muestra el mensaje del tema dentro del listado de temas en los foros.',
-    'setting_DisplayMessageInForumDisplay_enabledForums' => 'Activar en Foros',
-    'setting_DisplayMessageInForumDisplay_enabledForums_desc' => 'Selecciona los foros donde se mostrara el mensaje de los temas.',
-    'setting_DisplayMessageInForumDisplay_displayAttachments' => 'Mostrar Adjuntos',
-    'setting_DisplayMessageInForumDisplay_displayAttachments_desc' => 'Activa para mostrar los archivos adjuntos de los temas junto al mensaje.',
+namespace ougc\DisplayMessageInForumDisplay\Hooks\Admin;
 
-    'ougcDisplayMessageInForumDisplay_pluginLibrary' => 'Este plugin requiere <a href="{1}">PluginLibrary</a> version {2} para funcionar',
-];
+use function ougc\DisplayMessageInForumDisplay\Core\loadLanguage;
+
+function admin_config_plugins_deactivate(): bool
+{
+    global $mybb, $page;
+
+    if (
+        $mybb->get_input('action') != 'deactivate' ||
+        $mybb->get_input('plugin') != 'ougc_dmifd' ||
+        !$mybb->get_input('uninstall', \MyBB::INPUT_INT)
+    ) {
+        return false;
+    }
+
+    if ($mybb->request_method != 'post') {
+        $page->output_confirm_action(
+            'index.php?module=config-plugins&amp;action=deactivate&amp;uninstall=1&amp;plugin=ougc_dmifd'
+        );
+    }
+
+    if ($mybb->get_input('no')) {
+        \admin_redirect('index.php?module=config-plugins');
+    }
+
+    return true;
+}
+
+function admin_config_settings_start()
+{
+    loadLanguage();
+}
+
+
+function admin_style_templates_set()
+{
+    loadLanguage();
+}
