@@ -33,8 +33,10 @@ $l = [
 
     'setting_group_DisplayMessageInForumDisplay_' => 'Muestra el mensaje de los temas en el listado de temas',
     'setting_group_DisplayMessageInForumDisplay_desc' => 'Muestra el mensaje del tema dentro del listado de temas en los foros.',
-    'setting_DisplayMessageInForumDisplay_forums' => 'Activar en Foros',
-    'setting_DisplayMessageInForumDisplay_forums_desc' => 'Selecciona los foros donde se mostrara el mensaje de los temas.',
+    'setting_DisplayMessageInForumDisplay_enabledForums' => 'Activar en Foros',
+    'setting_DisplayMessageInForumDisplay_enabledForums_desc' => 'Selecciona los foros donde se mostrara el mensaje de los temas.',
+    'setting_DisplayMessageInForumDisplay_displayAttachments' => 'Mostrar Adjuntos',
+    'setting_DisplayMessageInForumDisplay_displayAttachments_desc' => 'Activa para mostrar los archivos adjuntos de los temas junto al mensaje.',
 
     'ougcDisplayMessageInForumDisplay_pluginLibrary' => 'Este plugin requiere <a href="{1}">PluginLibrary</a> version {2} para funcionar',
 ];

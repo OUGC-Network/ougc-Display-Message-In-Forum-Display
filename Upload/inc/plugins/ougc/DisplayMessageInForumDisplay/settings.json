@@ -1,6 +1,10 @@
 {
-  "forums": {
+  "enabledForums": {
     "optionscode": "forumselect",
     "value": -1
+  },
+  "displayAttachments": {
+    "optionscode": "yesno",
+    "value": 0
   }
 }

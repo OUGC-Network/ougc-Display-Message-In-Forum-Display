@@ -33,8 +33,10 @@ $l = [
 
     'setting_group_DisplayMessageInForumDisplay_' => 'Display Message In Forum Display',
     'setting_group_DisplayMessageInForumDisplay_desc' => 'Display the thread message inside the forum display thread listing.',
-    'setting_DisplayMessageInForumDisplay_forums' => 'Enabled Forums',
-    'setting_DisplayMessageInForumDisplay_forums_desc' => 'Select the forums where this feature should be run in',
+    'setting_DisplayMessageInForumDisplay_enabledForums' => 'Enabled Forums',
+    'setting_DisplayMessageInForumDisplay_enabledForums_desc' => 'Select the forums where this feature should be enabled in.',
+    'setting_DisplayMessageInForumDisplay_displayAttachments' => 'Display Attachments',
+    'setting_DisplayMessageInForumDisplay_displayAttachments_desc' => 'Enable to display the thread attachments along the message.',
 
     'ougcDisplayMessageInForumDisplay_pluginLibrary' => 'This plugin requires <a href="{1}">PluginLibrary</a> version {2} or later to be uploaded to your forum.',
 ];

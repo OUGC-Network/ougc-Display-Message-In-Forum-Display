@@ -30,15 +30,28 @@ declare(strict_types=1);
 
 namespace ougc\DisplayMessageInForumDisplay\Hooks\Forum;
 
+use function ougc\DisplayMessageInForumDisplay\Core\getSetting;
+
+function global_start()
+{
+    global $templatelist;
+
+    if (isset($templatelist)) {
+        $templatelist .= ',';
+    } else {
+        $templatelist = '';
+    }
+
+    $templatelist .= 'attachment_icon, postbit_attachments_thumbnails_thumbnail, postbit_attachments_attachment, postbit_attachments_thumbnails, postbit_attachmentsforums';
+}
+
 function forumdisplay_get_threads(): bool
 {
     global $fid;
 
     $forumID = (int)$fid;
 
-    $allowedForums = \ougc\DisplayMessageInForumDisplay\Core\getSetting('forums');
-
-    if (!is_member($allowedForums, ['usergroup' => $forumID, 'additionalgroups' => ''])) {
+    if (!is_member(getSetting('enabledForums'), ['usergroup' => $forumID, 'additionalgroups' => ''])) {
         return false;
     }
 
@@ -90,7 +103,7 @@ function forumdisplay_thread(): bool
 
     global $thread, $foruminfo, $parser, $mybb, $threadcache, $db, $attachcache;
 
-    if ($attachcache === null && $mybb->settings['enableattachments']) {
+    if (getSetting('displayAttachments') && $attachcache === null && $mybb->settings['enableattachments']) {
         $attachcache = [];
 
         $postIDs = [];
@@ -141,7 +154,9 @@ function forumdisplay_thread(): bool
 
     $thread['message'] = $parser->parse_message($thread['message'], $parserOptions);
 
-    if ($mybb->settings['enableattachments'] && isset($attachcache[$thread['firstpost']])) {
+    if (getSetting(
+            'displayAttachments'
+        ) && $mybb->settings['enableattachments'] && isset($attachcache[$thread['firstpost']])) {
         require_once \MYBB_ROOT . 'inc/functions_post.php';
 
         get_post_attachments($thread['firstpost'], $thread);
