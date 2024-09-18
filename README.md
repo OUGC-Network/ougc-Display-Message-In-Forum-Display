@@ -108,9 +108,9 @@ your themes.
 1. Open the `forumdisplay_thread` template for editing.
 2. Add `{$thread['message']}` wherever you want the message to be displayed.
 3. Add `{$thread['attachmentlist']}` to display all attachments.
-3. Add `{$thread['thumblist']}` to display only the thumb list.
-3. Add `{$thread['imagelist']}` to display only the image list.
-4. Save the template.
+4. Add `{$thread['thumblist']}` to display only the thumb list.
+5. Add `{$thread['imagelist']}` to display only the image list.
+6. Save the template.
 
 [Go up to Table of Contents](#table_of_contents)
 
